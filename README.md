@@ -1,6 +1,8 @@
-# Frontend
+# Post Mini
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.0.9.
+
+The project aims to build an API requester tool, that does not required authentication to use.
 
 ## Development server
 
