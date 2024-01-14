@@ -5,19 +5,23 @@
   <form [formGroup]="requestForm" class="flex flex-col gap-3">
     <!-- End point of request -->
     <div class="flex flex-row gap-2">
-      <div class="flex flex-col gap-1 w-1/4">
-        <select id="verb" formControlName="verb" class="text-lg h-full">
-          <option value="GET">GET</option>
-          <option value="POST">POST</option>
-          <option value="PUT">PUT</option>
-          <option value="PATCH">PATCH</option>
+      <!-- Verb -->
+      <mat-form-field appearance="outline" class="flex flex-col gap-1 w-1/4">
+        <mat-label>Verb</mat-label>
+        <mat-select id="verb" formControlName="verb" class="text-lg h-full">
+          <mat-option value="GET">GET</mat-option>
+          <mat-option value="POST">POST</mat-option>
+          <mat-option value="PUT">PUT</mat-option>
+          <mat-option value="PATCH">PATCH</mat-option>
           <!-- Add more request types as needed -->
-        </select>
-      </div>
+        </mat-select>
+      </mat-form-field>
 
-      <div class="flex flex-col gap-1 w-3/4">
+      <!-- URL -->
+      <mat-form-field appearance="outline" class="flex flex-col gap-1 w-3/4">
+        <mat-label>Target URL</mat-label>
         <input
-          hlmInput
+          matInput
           type="text"
           id="url"
           formControlName="url"
@@ -25,131 +29,152 @@
           class="text-lg"
           required
         />
-      </div>
+      </mat-form-field>
     </div>
 
-    <div brnTabs="headers" class="flex flex-col gap-2">
-      <hlm-tabs-list class="grid grid-cols-3" aria-label="tabs example">
-        <button hlmBtn hlmTabsTrigger="headers">Headers</button>
-        <button hlmBtn hlmTabsTrigger="params">Params</button>
-        <button hlmBtn hlmTabsTrigger="body">Body</button>
-      </hlm-tabs-list>
+    <mat-divider />
 
+    <mat-tab-group
+      mat-stretch-tabs="false"
+      mat-align-tabs="start"
+      dynamicHeight
+      animationDuration="500"
+    >
       <!-- Headers -->
-      <div hlmTabsContent="headers">
-        <div class="flex flex-col">
-          <div formArrayName="headers" class="flex flex-col gap-1">
-            @for (headerForm of headers.controls; track $index) {
-            <div
-              [formGroupName]="$index"
-              class="flex flex-row gap-1 justify-between"
-            >
+      <mat-tab label="Headers" class="flex flex-col">
+        <div formArrayName="headers" class="flex flex-col gap-1 mt-3">
+          @for (headerForm of headers.controls; track $index) {
+          <div
+            [formGroupName]="$index"
+            class="flex flex-row gap-1 justify-between"
+          >
+            <mat-form-field appearance="outline" class="flex-1">
+              <mat-label>Header Name</mat-label>
               <input
-                hlmInput
+                matInput
                 type="text"
                 id="name"
                 formControlName="name"
-                placeholder="header-name"
+                placeholder="name"
                 (focus)="onFocus($event)"
                 (change)="onChangeHeaders($event, $index)"
-                class="flex-1 py-1"
               />
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="flex-1">
+              <mat-label>Header Value</mat-label>
               <input
-                hlmInput
+                matInput
                 type="text"
                 id="value"
                 formControlName="value"
                 placeholder="value"
-                class="flex-1 py-1"
               />
+            </mat-form-field>
 
-              <div class="min-w-[50px]">
-                <button
-                  hlmBtn
-                  class="rounded-sm h-full aspect-square p-0"
-                  [disabled]="$last"
-                  (click)="deleteHeader($index)"
-                >
-                  <fa-icon [icon]="faTrashCan" size="xl"></fa-icon>
-                </button>
-              </div>
+            <div class="min-w-[50px]">
+              <button
+                mat-icon-button
+                color="primary"
+                [disabled]="$last"
+                (click)="deleteHeader($index)"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
             </div>
-            }
           </div>
+          }
         </div>
-      </div>
+      </mat-tab>
 
       <!-- Params -->
-      <div hlmTabsContent="params">
-        <div class="flex flex-col">
-          <div formArrayName="params" class="flex flex-col gap-1">
-            @for (paramForm of params.controls; track $index) {
-            <div
-              [formGroupName]="$index"
-              class="flex flex-row gap-1 justify-between"
-            >
+      <mat-tab label="Params" class="flex flex-col">
+        <div formArrayName="params" class="flex flex-col gap-1 mt-3">
+          @for (paramForm of params.controls; track $index) {
+          <div
+            [formGroupName]="$index"
+            class="flex flex-row gap-1 justify-between"
+          >
+            <mat-form-field appearance="outline" class="flex-1">
+              <mat-label>Param Name</mat-label>
               <input
-                hlmInput
+                matInput
                 type="text"
                 id="name"
                 formControlName="name"
-                placeholder="param-name"
+                placeholder="name"
                 class="flex-1 py-1"
                 (focus)="onFocus($event)"
                 (change)="onChangeParams($event, $index)"
               />
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="flex-1">
+              <mat-label>Param Value</mat-label>
               <input
-                hlmInput
+                matInput
                 type="text"
                 id="value"
                 formControlName="value"
                 placeholder="value"
                 class="flex-1 py-1"
               />
+            </mat-form-field>
 
-              <div class="min-w-[50px]">
-                <button
-                  hlmBtn
-                  class="rounded-sm h-full aspect-square p-0"
-                  [disabled]="$last"
-                  (click)="deleteParam($index)"
-                >
-                  <fa-icon [icon]="faTrashCan" size="xl"></fa-icon>
-                </button>
-              </div>
+            <div class="min-w-[50px]">
+              <button
+                mat-icon-button
+                color="primary"
+                [disabled]="$last"
+                (click)="deleteParam($index)"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
             </div>
-            }
           </div>
+          }
         </div>
-      </div>
+      </mat-tab>
 
-      <div hlmTabsContent="body">
-        <textarea
-          hlmInput
-          type="text"
-          id="body"
-          formControlName="body"
-          class="w-full p-0 resize-y min-h-16"
-          (keyup)="autoGrowTextZone($event)"
-          placeholder="{&#10;  data: i-am-data&#10;}"
-        ></textarea>
-      </div>
-    </div>
+      <!-- Body -->
+      <mat-tab label="Body">
+        <mat-form-field appearance="outline" class="w-full mt-3">
+          <mat-label>Raw Body</mat-label>
+          <textarea
+            matInput
+            cdkTextareaAutosize
+            #autosize="cdkTextareaAutosize"
+            cdkAutosizeMinRows="3"
+            type="text"
+            id="body"
+            formControlName="body"
+            placeholder="{&#10;  data: i-am-data&#10;}"
+          ></textarea>
+        </mat-form-field>
+      </mat-tab>
+    </mat-tab-group>
   </form>
 </ng-template>
 
-<div hlmCard>
-  <div hlmCardHeader>
-    <h3 hlmCardTitle>HTTP Request</h3>
-    <p hlmCardDescription>Insert the target endpoint and request information</p>
-  </div>
-  <div hlmCardContent>
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>HTTP Request</mat-card-title>
+    <mat-card-subtitle
+      >Insert the target endpoint and request information</mat-card-subtitle
+    >
+  </mat-card-header>
+  <mat-card-content>
     <ng-template [ngTemplateOutlet]="requestFormTemplate"></ng-template>
-  </div>
-  <div hlmCardFooter>
-    <button hlmBtn type="submit" (click)="sendRequest()">Request</button>
-  </div>
-</div>
+  </mat-card-content>
+  <mat-card-actions>
+    <button
+      type="submit"
+      mat-raised-button
+      color="primary"
+      (click)="sendRequest()"
+    >
+      Request
+    </button>
+  </mat-card-actions>
+</mat-card>
 
 <!-- Display loading indicator or error message based on the loading state -->
 <div *ngIf="loadingState === LoadingState.Loading">Loading...</div>

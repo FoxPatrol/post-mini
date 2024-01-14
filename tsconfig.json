@@ -22,11 +22,7 @@
     "baseUrl": "./src",
     "paths": {
       "@components/*": ["app/components/*"],
-      "@views/*": ["app/views/*"],
-      "@spartan/ui-card-helm": ["app/spartan/ui-card-helm/src/index.ts"],
-      "@spartan-ng/ui-input-helm": ["app/spartan/ui-input-helm/src/index.ts"],
-      "@spartan-ng/ui-button-helm": ["app/spartan/ui-button-helm/src/index.ts"],
-      "@spartan-ng/ui-tabs-helm": ["app/spartan/ui-tabs-helm/src/index.ts"]
+      "@views/*": ["app/views/*"]
     }
   },
   "angularCompilerOptions": {

@@ -1,4 +1,10 @@
-import { AfterViewInit, Component, ElementRef, Renderer2 } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  NgZone,
+  Renderer2,
+  ViewChild,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import {
@@ -9,30 +15,16 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { firstValueFrom } from 'rxjs';
-import {
-  HlmCardContentDirective,
-  HlmCardDescriptionDirective,
-  HlmCardDirective,
-  HlmCardFooterDirective,
-  HlmCardHeaderDirective,
-  HlmCardTitleDirective,
-} from '@spartan/ui-card-helm';
-import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { HlmInputDirective } from '@spartan-ng/ui-input-helm';
-import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
-import {
-  BrnTabsContentDirective,
-  BrnTabsDirective,
-  BrnTabsListDirective,
-  BrnTabsTriggerDirective,
-} from '@spartan-ng/ui-tabs-brain';
-import {
-  HlmTabsContentDirective,
-  HlmTabsListComponent,
-  HlmTabsTriggerDirective,
-} from '@spartan-ng/ui-tabs-helm';
+import { firstValueFrom, take } from 'rxjs';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatIconModule } from '@angular/material/icon';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatTabsModule } from '@angular/material/tabs';
+import { CdkTextareaAutosize, TextFieldModule } from '@angular/cdk/text-field';
 
 enum LoadingState {
   Default,
@@ -52,23 +44,15 @@ type Header = {
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    FontAwesomeModule,
-    HlmCardContentDirective,
-    HlmCardDescriptionDirective,
-    HlmCardDirective,
-    HlmCardFooterDirective,
-    HlmCardHeaderDirective,
-    HlmCardTitleDirective,
-    HlmInputDirective,
-    HlmButtonDirective,
-
-    BrnTabsDirective,
-    BrnTabsContentDirective,
-    BrnTabsListDirective,
-    BrnTabsTriggerDirective,
-    HlmTabsListComponent,
-    HlmTabsTriggerDirective,
-    HlmTabsContentDirective,
+    MatButtonModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatIconModule,
+    MatDividerModule,
+    MatTabsModule,
+    TextFieldModule,
   ],
   templateUrl: './http-request-card.component.html',
   styleUrl: './http-request-card.component.scss',
@@ -79,13 +63,11 @@ export class HttpRequestCardComponent {
   loadingState: LoadingState = LoadingState.Default;
 
   initialValue: string | null = null;
-  faTrashCan = faTrashCan;
 
   constructor(
     public http: HttpClient,
     private formBuilder: FormBuilder,
-    private el: ElementRef,
-    private renderer: Renderer2
+    private _ngZone: NgZone
   ) {
     const headerForm = this.formBuilder.group({
       name: ['h1', this.headerNameValidator],
@@ -106,6 +88,9 @@ export class HttpRequestCardComponent {
     this.addNewHeader(); // start headers with 1
     this.addNewParam(); // start params with 1
   }
+
+  //@ts-ignore this is used for the auto resizing ot the text area
+  @ViewChild('autosize') autosize: CdkTextareaAutosize;
 
   get LoadingState() {
     return LoadingState;
@@ -337,8 +322,10 @@ export class HttpRequestCardComponent {
     return;
   }
 
-  autoGrowTextZone(e: any) {
-    e.target.style.height = '0px';
-    e.target.style.height = e.target.scrollHeight + 25 + 'px';
+  triggerResize() {
+    // Wait for changes to be applied, then trigger textarea resize.
+    this._ngZone.onStable
+      .pipe(take(1))
+      .subscribe(() => this.autosize.resizeToFitContent(true));
   }
 }
