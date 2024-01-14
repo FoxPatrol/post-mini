@@ -1,0 +1,324 @@
+{
+  "version": "6.0",
+  "nxVersion": "17.2.8",
+  "deps": {
+    "@angular/animations": "^17.0.0",
+    "@angular/cdk": "17.0.0",
+    "@angular/common": "^17.0.0",
+    "@angular/compiler": "^17.0.0",
+    "@angular/core": "^17.0.0",
+    "@angular/forms": "^17.0.0",
+    "@angular/platform-browser": "^17.0.0",
+    "@angular/platform-browser-dynamic": "^17.0.0",
+    "@angular/platform-server": "^17.0.0",
+    "@angular/router": "^17.0.0",
+    "@angular/ssr": "^17.0.9",
+    "@fortawesome/angular-fontawesome": "^0.14.1",
+    "@fortawesome/fontawesome-svg-core": "^6.5.1",
+    "@fortawesome/free-solid-svg-icons": "^6.5.1",
+    "@spartan-ng/ui-core": "^0.0.1-alpha.321",
+    "@spartan-ng/ui-dialog-brain": "0.0.1-alpha.321",
+    "@spartan-ng/ui-popover-brain": "0.0.1-alpha.321",
+    "class-variance-authority": "^0.6.0",
+    "clsx": "^1.2.1",
+    "express": "^4.18.2",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.3.0",
+    "zone.js": "~0.14.2",
+    "@angular-devkit/build-angular": "^17.0.9",
+    "@angular/cli": "^17.0.9",
+    "@angular/compiler-cli": "^17.0.0",
+    "@spartan-ng/cli": "^0.0.1-alpha.334",
+    "@types/express": "^4.17.17",
+    "@types/jasmine": "~5.1.0",
+    "@types/node": "^18.18.0",
+    "autoprefixer": "^10.4.16",
+    "jasmine-core": "~5.1.0",
+    "karma": "~6.4.0",
+    "karma-chrome-launcher": "~3.2.0",
+    "karma-coverage": "~2.2.0",
+    "karma-jasmine": "~5.1.0",
+    "karma-jasmine-html-reporter": "~2.1.0",
+    "postcss": "^8.4.33",
+    "tailwind-merge": "^1.14.0",
+    "tailwindcss": "^3.4.1",
+    "tailwindcss-animate": "^1.0.6",
+    "typescript": "~5.2.2"
+  },
+  "pathMappings": {
+    "@components/*": [
+      "app/components/*"
+    ],
+    "@views/*": [
+      "app/views/*"
+    ],
+    "@spartan/ui-card-helm": [
+      "app/spartan/ui-card-helm/src/index.ts"
+    ],
+    "@spartan-ng/ui-input-helm": [
+      "app/spartan/ui-input-helm/src/index.ts"
+    ],
+    "@spartan-ng/ui-button-helm": [
+      "app/spartan/ui-button-helm/src/index.ts"
+    ],
+    "@spartan-ng/ui-popover-helm": [
+      "./src/app/spartan/ui-popover-helm/src/index.ts"
+    ]
+  },
+  "nxJsonPlugins": [],
+  "fileMap": {
+    "projectFileMap": {
+      "frontend": [
+        {
+          "file": ".editorconfig",
+          "hash": "6686520031028425313"
+        },
+        {
+          "file": ".gitignore",
+          "hash": "13044518069027839699"
+        },
+        {
+          "file": ".vscode/extensions.json",
+          "hash": "5331566439708925252"
+        },
+        {
+          "file": ".vscode/launch.json",
+          "hash": "17038929134016848735"
+        },
+        {
+          "file": ".vscode/tasks.json",
+          "hash": "5336636969995539451"
+        },
+        {
+          "file": "README.md",
+          "hash": "10848932834899802788"
+        },
+        {
+          "file": "angular.json",
+          "hash": "12978460514885871505"
+        },
+        {
+          "file": "package-lock.json",
+          "hash": "2396804885965706292"
+        },
+        {
+          "file": "package.json",
+          "hash": "11591174361671308453",
+          "deps": [
+            "npm:@angular/animations",
+            "npm:@angular/cdk",
+            "npm:@angular/common",
+            "npm:@angular/compiler",
+            "npm:@angular/core",
+            "npm:@angular/forms",
+            "npm:@angular/platform-browser",
+            "npm:@angular/platform-browser-dynamic",
+            "npm:@angular/platform-server",
+            "npm:@angular/router",
+            "npm:@angular/ssr",
+            "npm:@fortawesome/angular-fontawesome",
+            "npm:@fortawesome/fontawesome-svg-core",
+            "npm:@fortawesome/free-solid-svg-icons",
+            "npm:@spartan-ng/ui-core",
+            "npm:@spartan-ng/ui-dialog-brain",
+            "npm:@spartan-ng/ui-popover-brain",
+            "npm:class-variance-authority",
+            "npm:clsx",
+            "npm:express",
+            "npm:rxjs",
+            "npm:tslib",
+            "npm:zone.js",
+            "npm:@angular-devkit/build-angular",
+            "npm:@angular/cli",
+            "npm:@angular/compiler-cli",
+            "npm:@spartan-ng/cli",
+            "npm:@types/express",
+            "npm:@types/jasmine",
+            "npm:@types/node",
+            "npm:autoprefixer",
+            "npm:jasmine-core",
+            "npm:karma",
+            "npm:karma-chrome-launcher",
+            "npm:karma-coverage",
+            "npm:karma-jasmine",
+            "npm:karma-jasmine-html-reporter",
+            "npm:postcss",
+            "npm:tailwind-merge",
+            "npm:tailwindcss",
+            "npm:tailwindcss-animate",
+            "npm:typescript"
+          ]
+        },
+        {
+          "file": "postcss.config.js",
+          "hash": "7260622372845905888"
+        },
+        {
+          "file": "server.ts",
+          "hash": "7713808127824314998"
+        },
+        {
+          "file": "src/app/app.component.html",
+          "hash": "16498897523005705592"
+        },
+        {
+          "file": "src/app/app.component.scss",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "src/app/app.component.spec.ts",
+          "hash": "13242661823377818195"
+        },
+        {
+          "file": "src/app/app.component.ts",
+          "hash": "6407212337246509636"
+        },
+        {
+          "file": "src/app/app.config.server.ts",
+          "hash": "14750464052796800194"
+        },
+        {
+          "file": "src/app/app.config.ts",
+          "hash": "6748480695837485898"
+        },
+        {
+          "file": "src/app/app.routes.ts",
+          "hash": "12994454183578858598"
+        },
+        {
+          "file": "src/app/components/http-request-card/http-request-card.component.html",
+          "hash": "15230165207348301836"
+        },
+        {
+          "file": "src/app/components/http-request-card/http-request-card.component.scss",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "src/app/components/http-request-card/http-request-card.component.spec.ts",
+          "hash": "16916447278117097548"
+        },
+        {
+          "file": "src/app/components/http-request-card/http-request-card.component.ts",
+          "hash": "15438203072257565572"
+        },
+        {
+          "file": "src/app/spartan/ui-button-helm/src/index.ts",
+          "hash": "8982221364966377158"
+        },
+        {
+          "file": "src/app/spartan/ui-button-helm/src/lib/hlm-button.directive.ts",
+          "hash": "9019633133650424029"
+        },
+        {
+          "file": "src/app/spartan/ui-card-helm/src/index.ts",
+          "hash": "16562238750490677596"
+        },
+        {
+          "file": "src/app/spartan/ui-card-helm/src/lib/hlm-card-content.directive.ts",
+          "hash": "6231442166457818383"
+        },
+        {
+          "file": "src/app/spartan/ui-card-helm/src/lib/hlm-card-description.directive.ts",
+          "hash": "16631480451529588409"
+        },
+        {
+          "file": "src/app/spartan/ui-card-helm/src/lib/hlm-card-footer.directive.ts",
+          "hash": "7496072894021631429"
+        },
+        {
+          "file": "src/app/spartan/ui-card-helm/src/lib/hlm-card-header.directive.ts",
+          "hash": "14932429245151437185"
+        },
+        {
+          "file": "src/app/spartan/ui-card-helm/src/lib/hlm-card-title.directive.ts",
+          "hash": "16265379481745112189"
+        },
+        {
+          "file": "src/app/spartan/ui-card-helm/src/lib/hlm-card.directive.ts",
+          "hash": "10897083129189954870"
+        },
+        {
+          "file": "src/app/spartan/ui-input-helm/src/index.ts",
+          "hash": "487913567356772959"
+        },
+        {
+          "file": "src/app/spartan/ui-input-helm/src/lib/hlm-input-error.directive.ts",
+          "hash": "15093991086408705879"
+        },
+        {
+          "file": "src/app/spartan/ui-input-helm/src/lib/hlm-input.directive.ts",
+          "hash": "15016866873352757880"
+        },
+        {
+          "file": "src/app/spartan/ui-popover-helm/src/index.ts",
+          "hash": "14206434168979323056"
+        },
+        {
+          "file": "src/app/spartan/ui-popover-helm/src/lib/hlm-popover-close.directive.ts",
+          "hash": "9977690189635583094"
+        },
+        {
+          "file": "src/app/spartan/ui-popover-helm/src/lib/hlm-popover-content.directive.ts",
+          "hash": "10076488074365454576"
+        },
+        {
+          "file": "src/app/views/home-view/home-view.component.html",
+          "hash": "1035137130506562928"
+        },
+        {
+          "file": "src/app/views/home-view/home-view.component.scss",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "src/app/views/home-view/home-view.component.spec.ts",
+          "hash": "9835609857469140569"
+        },
+        {
+          "file": "src/app/views/home-view/home-view.component.ts",
+          "hash": "7419202934190541409"
+        },
+        {
+          "file": "src/assets/.gitkeep",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "src/favicon.ico",
+          "hash": "3988961587069885523"
+        },
+        {
+          "file": "src/index.html",
+          "hash": "17260147769287336186"
+        },
+        {
+          "file": "src/main.server.ts",
+          "hash": "11653607448136507287"
+        },
+        {
+          "file": "src/main.ts",
+          "hash": "16635586463787978962"
+        },
+        {
+          "file": "src/styles.scss",
+          "hash": "5537632511928439823"
+        },
+        {
+          "file": "tailwind.config.js",
+          "hash": "7854110998509801494"
+        },
+        {
+          "file": "tsconfig.app.json",
+          "hash": "5647140842165808241"
+        },
+        {
+          "file": "tsconfig.json",
+          "hash": "16841489339671202668"
+        },
+        {
+          "file": "tsconfig.spec.json",
+          "hash": "15575553540147145788"
+        }
+      ]
+    },
+    "nonProjectFiles": []
+  }
+}
