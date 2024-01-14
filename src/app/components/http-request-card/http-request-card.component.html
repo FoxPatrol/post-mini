@@ -1,0 +1,164 @@
+<h1>Post Mini</h1>
+
+<!-- Card for http request -->
+<ng-template #requestFormTemplate>
+  <form [formGroup]="requestForm" class="flex flex-col gap-3">
+    <!-- End point of request -->
+    <div class="flex flex-row gap-2">
+      <div class="flex flex-col gap-1 w-1/4">
+        <select id="verb" formControlName="verb" class="text-lg h-full">
+          <option value="GET">GET</option>
+          <option value="POST">POST</option>
+          <option value="PUT">PUT</option>
+          <option value="PATCH">PATCH</option>
+          <!-- Add more request types as needed -->
+        </select>
+      </div>
+
+      <div class="flex flex-col gap-1 w-3/4">
+        <input
+          hlmInput
+          type="text"
+          id="url"
+          formControlName="url"
+          placeholder="https://your-url.io"
+          class="text-lg"
+          required
+        />
+      </div>
+    </div>
+
+    <div brnTabs="headers" class="flex flex-col gap-2">
+      <hlm-tabs-list class="grid grid-cols-3" aria-label="tabs example">
+        <button hlmBtn hlmTabsTrigger="headers">Headers</button>
+        <button hlmBtn hlmTabsTrigger="params">Params</button>
+        <button hlmBtn hlmTabsTrigger="body">Body</button>
+      </hlm-tabs-list>
+
+      <!-- Headers -->
+      <div hlmTabsContent="headers">
+        <div class="flex flex-col">
+          <div formArrayName="headers" class="flex flex-col gap-1">
+            @for (headerForm of headers.controls; track $index) {
+            <div
+              [formGroupName]="$index"
+              class="flex flex-row gap-1 justify-between"
+            >
+              <input
+                hlmInput
+                type="text"
+                id="name"
+                formControlName="name"
+                placeholder="header-name"
+                (focus)="onFocus($event)"
+                (change)="onChangeHeaders($event, $index)"
+                class="flex-1 py-1"
+              />
+              <input
+                hlmInput
+                type="text"
+                id="value"
+                formControlName="value"
+                placeholder="value"
+                class="flex-1 py-1"
+              />
+
+              <div class="min-w-[50px]">
+                <button
+                  hlmBtn
+                  class="rounded-sm h-full aspect-square p-0"
+                  [disabled]="$last"
+                  (click)="deleteHeader($index)"
+                >
+                  <fa-icon [icon]="faTrashCan" size="xl"></fa-icon>
+                </button>
+              </div>
+            </div>
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- Params -->
+      <div hlmTabsContent="params">
+        <div class="flex flex-col">
+          <div formArrayName="params" class="flex flex-col gap-1">
+            @for (paramForm of params.controls; track $index) {
+            <div
+              [formGroupName]="$index"
+              class="flex flex-row gap-1 justify-between"
+            >
+              <input
+                hlmInput
+                type="text"
+                id="name"
+                formControlName="name"
+                placeholder="param-name"
+                class="flex-1 py-1"
+                (focus)="onFocus($event)"
+                (change)="onChangeParams($event, $index)"
+              />
+              <input
+                hlmInput
+                type="text"
+                id="value"
+                formControlName="value"
+                placeholder="value"
+                class="flex-1 py-1"
+              />
+
+              <div class="min-w-[50px]">
+                <button
+                  hlmBtn
+                  class="rounded-sm h-full aspect-square p-0"
+                  [disabled]="$last"
+                  (click)="deleteParam($index)"
+                >
+                  <fa-icon [icon]="faTrashCan" size="xl"></fa-icon>
+                </button>
+              </div>
+            </div>
+            }
+          </div>
+        </div>
+      </div>
+
+      <div hlmTabsContent="body">
+        <textarea
+          hlmInput
+          type="text"
+          id="body"
+          formControlName="body"
+          class="w-full p-0 resize-y min-h-16"
+          (keyup)="autoGrowTextZone($event)"
+          placeholder="{&#10;  data: i-am-data&#10;}"
+        ></textarea>
+      </div>
+    </div>
+  </form>
+</ng-template>
+
+<div hlmCard>
+  <div hlmCardHeader>
+    <h3 hlmCardTitle>HTTP Request</h3>
+    <p hlmCardDescription>Insert the target endpoint and request information</p>
+  </div>
+  <div hlmCardContent>
+    <ng-template [ngTemplateOutlet]="requestFormTemplate"></ng-template>
+  </div>
+  <div hlmCardFooter>
+    <button hlmBtn type="submit" (click)="sendRequest()">Request</button>
+  </div>
+</div>
+
+<!-- Display loading indicator or error message based on the loading state -->
+<div *ngIf="loadingState === LoadingState.Loading">Loading...</div>
+<div *ngIf="loadingState === LoadingState.Error">
+  Error occurred while loading.
+</div>
+
+<!-- Display response if the loading state is Loaded -->
+<div *ngIf="loadingState === LoadingState.Loaded">
+  <h3>Response:</h3>
+  <pre>{{ response | json }}</pre>
+</div>

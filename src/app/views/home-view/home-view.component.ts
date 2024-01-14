@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
+import { HttpRequestCardComponent } from '@components/http-request-card/http-request-card.component';
 
 @Component({
   selector: 'app-home-view',
   standalone: true,
-  imports: [],
+  imports: [HttpRequestCardComponent],
   templateUrl: './home-view.component.html',
-  styleUrl: './home-view.component.scss'
+  styleUrl: './home-view.component.scss',
 })
-export class HomeViewComponent {
-
-}
+export class HomeViewComponent {}
