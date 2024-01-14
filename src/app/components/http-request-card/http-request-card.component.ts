@@ -1,10 +1,4 @@
-import {
-  Component,
-  ElementRef,
-  NgZone,
-  Renderer2,
-  ViewChild,
-} from '@angular/core';
+import { Component, NgZone, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import {
@@ -25,6 +19,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatTabsModule } from '@angular/material/tabs';
 import { CdkTextareaAutosize, TextFieldModule } from '@angular/cdk/text-field';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 enum LoadingState {
   Default,
@@ -53,6 +48,7 @@ type Header = {
     MatDividerModule,
     MatTabsModule,
     TextFieldModule,
+    MatCheckboxModule,
   ],
   templateUrl: './http-request-card.component.html',
   styleUrl: './http-request-card.component.scss',
@@ -69,24 +65,19 @@ export class HttpRequestCardComponent {
     private formBuilder: FormBuilder,
     private _ngZone: NgZone
   ) {
-    const headerForm = this.formBuilder.group({
-      name: ['h1', this.headerNameValidator],
-      value: ['1'],
-    });
-
     this.requestForm = this.formBuilder.group({
       verb: ['GET', Validators.required],
       url: [
         'https://echo.hoppscotch.io',
         [Validators.required, this.urlValidator],
       ],
-      headers: this.formBuilder.array([headerForm]),
-      params: this.formBuilder.array([headerForm]),
+      headers: this.formBuilder.array([]),
+      params: this.formBuilder.array([]),
       body: [''],
     });
 
-    this.addNewHeader(); // start headers with 1
-    this.addNewParam(); // start params with 1
+    this.addNewFormToFormArray(this.headers); // start headers with 1
+    this.addNewFormToFormArray(this.params); // start params with 1
   }
 
   //@ts-ignore this is used for the auto resizing ot the text area
@@ -253,8 +244,8 @@ export class HttpRequestCardComponent {
     this.initialValue = event.target.value;
   }
 
-  onChangeHeaders(event: any, formIndex: any) {
-    this.headers.at(formIndex).get('value')?.updateValueAndValidity();
+  onChangeFormArray(event: any, formArray: FormArray, formIndex: any) {
+    formArray.at(formIndex).get('value')?.updateValueAndValidity();
 
     if (!event || !event.target) {
       return;
@@ -264,62 +255,64 @@ export class HttpRequestCardComponent {
     const previousValue = this.initialValue;
 
     if (!previousValue && currentValue) {
-      this.addNewHeader();
+      this.addNewFormToFormArray(formArray);
     } else if (previousValue && !currentValue) {
-      this.deleteHeader(formIndex);
+      this.deleteFormFromFormArray(formArray, formIndex);
     }
   }
 
-  onChangeParams(event: any, formIndex: any) {
-    this.params.at(formIndex).get('value')?.updateValueAndValidity();
+  deleteFormFromFormArray(formArray: FormArray, index: number) {
+    formArray.removeAt(index);
 
-    if (!event || !event.target) {
+    // Find the key associated with the formArray
+    let key: string | null = null;
+    Object.keys(this.requestForm.controls).forEach((formControlKey) => {
+      if (this.requestForm.controls[formControlKey] === formArray) {
+        key = formControlKey;
+        return; // exit the loop once found
+      }
+    });
+
+    if (!key) {
       return;
     }
 
-    const currentValue: string = event.target.value;
-    const previousValue = this.initialValue;
+    // Reassign the form array to trigger update
+    this.requestForm.setControl(key, new FormArray(formArray.controls));
+    return;
+  }
 
-    if (!previousValue && currentValue) {
-      this.addNewParam();
-    } else if (previousValue && !currentValue) {
-      this.deleteParam(formIndex);
+  addNewFormToFormArray(formArray: FormArray) {
+    const form = this.formBuilder.group({
+      name: [{ value: '', disabled: false }, this.headerNameValidator],
+      value: [{ value: '', disabled: false }],
+      enabled: { value: null, disabled: true },
+    });
+
+    // On add new form, set last form to have checkbox checked and enabled
+    const lastControl = formArray.at(formArray.length - 1);
+    if (lastControl) {
+      const checkbox = lastControl.get('enabled');
+      checkbox?.enable();
+      checkbox?.setValue(true);
     }
-  }
 
-  addNewHeader() {
-    const headerForm = this.formBuilder.group({
-      name: ['', this.headerNameValidator],
-      value: [''],
+    formArray.push(form);
+
+    // Subscribe to changes in the 'checked' control
+    form.get('enabled')?.valueChanges.subscribe((isEnabled) => {
+      const nameControl = form.get('name');
+      const valueControl = form.get('value');
+
+      // Enable or disable 'name' and 'value' controls based on the 'enabled' value
+      if (isEnabled) {
+        nameControl?.enable();
+        valueControl?.enable();
+      } else {
+        nameControl?.disable();
+        valueControl?.disable();
+      }
     });
-    this.headers.push(headerForm);
-  }
-
-  deleteHeader(index: number) {
-    this.headers.removeAt(index);
-
-    // Reassign the form array to trigger update
-    this.requestForm.setControl(
-      'headers',
-      new FormArray(this.headers.controls)
-    );
-    return;
-  }
-
-  addNewParam() {
-    const paramForm = this.formBuilder.group({
-      name: ['', this.headerNameValidator],
-      value: [''],
-    });
-    this.params.push(paramForm);
-  }
-
-  deleteParam(index: number) {
-    this.params.removeAt(index);
-
-    // Reassign the form array to trigger update
-    this.requestForm.setControl('params', new FormArray(this.params.controls));
-    return;
   }
 
   triggerResize() {

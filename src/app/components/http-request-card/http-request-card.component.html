@@ -29,6 +29,7 @@
           class="text-lg"
           required
         />
+        <mat-error> Please enter a valid url "http://..." </mat-error>
       </mat-form-field>
     </div>
 
@@ -42,11 +43,11 @@
     >
       <!-- Headers -->
       <mat-tab label="Headers" class="flex flex-col">
-        <div formArrayName="headers" class="flex flex-col gap-1 mt-3">
+        <div formArrayName="headers" class="flex flex-col mt-3">
           @for (headerForm of headers.controls; track $index) {
           <div
             [formGroupName]="$index"
-            class="flex flex-row gap-1 justify-between"
+            class="flex flex-row gap-2 justify-between"
           >
             <mat-form-field appearance="outline" class="flex-1">
               <mat-label>Header Name</mat-label>
@@ -57,7 +58,7 @@
                 formControlName="name"
                 placeholder="name"
                 (focus)="onFocus($event)"
-                (change)="onChangeHeaders($event, $index)"
+                (change)="onChangeFormArray($event, headers, $index)"
               />
             </mat-form-field>
             <mat-form-field appearance="outline" class="flex-1">
@@ -71,12 +72,21 @@
               />
             </mat-form-field>
 
-            <div class="min-w-[50px]">
+            <div
+              class="grid grid-cols-2 place-items-center pb-[22px] px-2 gap-2"
+            >
+              <div>
+                <mat-checkbox
+                  id="enabled"
+                  formControlName="enabled"
+                ></mat-checkbox>
+              </div>
+
               <button
                 mat-icon-button
                 color="primary"
                 [disabled]="$last"
-                (click)="deleteHeader($index)"
+                (click)="deleteFormFromFormArray(headers, $index)"
               >
                 <mat-icon>delete</mat-icon>
               </button>
@@ -88,7 +98,7 @@
 
       <!-- Params -->
       <mat-tab label="Params" class="flex flex-col">
-        <div formArrayName="params" class="flex flex-col gap-1 mt-3">
+        <div formArrayName="params" class="flex flex-col mt-3">
           @for (paramForm of params.controls; track $index) {
           <div
             [formGroupName]="$index"
@@ -104,7 +114,7 @@
                 placeholder="name"
                 class="flex-1 py-1"
                 (focus)="onFocus($event)"
-                (change)="onChangeParams($event, $index)"
+                (change)="onChangeFormArray($event, params, $index)"
               />
             </mat-form-field>
             <mat-form-field appearance="outline" class="flex-1">
@@ -119,12 +129,21 @@
               />
             </mat-form-field>
 
-            <div class="min-w-[50px]">
+            <div
+              class="grid grid-cols-2 place-items-center pb-[22px] px-2 gap-2"
+            >
+              <div>
+                <mat-checkbox
+                  id="enabled"
+                  formControlName="enabled"
+                ></mat-checkbox>
+              </div>
+
               <button
                 mat-icon-button
                 color="primary"
                 [disabled]="$last"
-                (click)="deleteParam($index)"
+                (click)="deleteFormFromFormArray(params, $index)"
               >
                 <mat-icon>delete</mat-icon>
               </button>
@@ -157,11 +176,8 @@
 <mat-card>
   <mat-card-header>
     <mat-card-title>HTTP Request</mat-card-title>
-    <mat-card-subtitle
-      >Insert the target endpoint and request information</mat-card-subtitle
-    >
   </mat-card-header>
-  <mat-card-content>
+  <mat-card-content class="mt-4">
     <ng-template [ngTemplateOutlet]="requestFormTemplate"></ng-template>
   </mat-card-content>
   <mat-card-actions>
