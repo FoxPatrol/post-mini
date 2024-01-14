@@ -6,9 +6,9 @@ The project aims to build an API requester tool, that does not required authenti
 
 ## Styling
 
-For styling, it uses [TailwindCSS](https://v2.tailwindcss.com/docs) and [SpartanNg](https://www.spartan.ng/documentation/introduction).
+For styling, it uses [TailwindCSS](https://v2.tailwindcss.com/docs) and [Angular Material](https://material.angular.io/).
 
-For icons, it uses [FontAwesome](https://fontawesome.com/). For all features related to the icons, visit the [documentation](https://github.com/FortAwesome/angular-fontawesome/blob/HEAD/docs/usage/features.md).
+For icons, it uses both icons from [Angular Material Icons](https://fonts.google.com/icons) and [FontAwesome](https://fontawesome.com/). For all features related to the icons, visit the [documentation](https://github.com/FortAwesome/angular-fontawesome/blob/HEAD/docs/usage/features.md).
 
 ### How to use TailwindCSS
 
@@ -29,35 +29,42 @@ TailwindCSS can be configured via the file `tailwindcss.config.js`. To use, visi
 </div>
 `
 
-### How to use SpartanNg
+### How to use Angular Material
 
-To generate the SpartanNg libraries, use the Angular CLI command provided. Place the spartan library in the directory `src/app/spartan`. It is possible some editing on the `tsconfig.json` is needed to have the path configured properly.
+Angular material is installed via the `npm i` command like any other package. To start using it on the codebase, visit the [documentation](https://material.angular.io/components/categories) to see which components are available and how to go about their implementation.
 
-Then, import the directives in your angular component and add them to the `imports` array.
+Then, import the modules in your angular component and add them to the `imports` array.
 
-You are set! Use directly in a component as so:
+You are set! Use directly in the template as so:
 
 `
 
-<section hlmCard>
-  <div hlmCardHeader>
-    <h3 hlmCardTitle>Title</h3>
-    <p hlmCardDescription>Description</p>
-  </div>
-  <div hlmCardContent>
-    Content
-  </div>
-  <p hlmCardFooter>
-    Footer
-  </p>
-</section>
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Card Title</mat-card-title>
+    <mat-card-subtitle
+      >Some interesting information that describes the card</mat-card-subtitle
+    >
+  </mat-card-header>
+  <mat-card-content>
+    Content of the card
+  </mat-card-content>
+  <mat-card-actions>
+    <button
+      mat-raised-button
+      color="primary"
+    >
+      Click me!
+    </button>
+  </mat-card-actions>
+</mat-card>
 `
 
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
 
-## Request source -
+## Request source
 
 To test requests, an endpoint must be requested. For this, a variety of sources can be used. These are some of the readily available:
 
