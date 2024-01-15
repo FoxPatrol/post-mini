@@ -43,7 +43,10 @@
       animationDuration="500"
     >
       <!-- Headers -->
-      <mat-tab label="Headers" class="flex flex-col">
+      <mat-tab
+        [label]="headerCount > 0 ? 'Headers (' + headerCount + ')' : 'Headers'"
+        class="flex flex-col"
+      >
         <div formArrayName="headers" class="flex flex-col mt-3">
           @for (headerForm of headers.controls; track $index) {
           <div
@@ -98,7 +101,10 @@
       </mat-tab>
 
       <!-- Params -->
-      <mat-tab label="Params" class="flex flex-col">
+      <mat-tab
+        [label]="paramCount > 0 ? 'Params (' + paramCount + ')' : 'Params'"
+        class="flex flex-col"
+      >
         <div formArrayName="params" class="flex flex-col mt-3">
           @for (paramForm of params.controls; track $index) {
           <div
