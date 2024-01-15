@@ -81,6 +81,11 @@
             >
               <div>
                 <mat-checkbox
+                  matTooltip="{{
+                    headerForm.get('enabled')?.value
+                      ? 'Disable header'
+                      : 'Enable header'
+                  }}"
                   id="enabled"
                   formControlName="enabled"
                 ></mat-checkbox>
@@ -88,6 +93,7 @@
 
               <button
                 mat-icon-button
+                matTooltip="Delete header"
                 color="primary"
                 [disabled]="$last"
                 (click)="deleteFormFromFormArray(headers, $index)"
