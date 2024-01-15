@@ -21,6 +21,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatTabsModule } from '@angular/material/tabs';
 import { CdkTextareaAutosize, TextFieldModule } from '@angular/cdk/text-field';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 enum LoadingState {
   Default,
@@ -50,6 +51,7 @@ type Header = {
     MatTabsModule,
     TextFieldModule,
     MatCheckboxModule,
+    MatTooltipModule,
   ],
   templateUrl: './http-request-card.component.html',
   styleUrl: './http-request-card.component.scss',
