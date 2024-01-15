@@ -273,11 +273,10 @@ export class HttpRequestCardComponent {
       return;
     }
 
+    this.recountEnabledElementsInFormArray(formArray);
+
     // Reassign the form array to trigger update
-    this.requestForm.setControl(
-      formArrayName,
-      new FormArray(formArray.controls)
-    );
+    this.requestForm.setControl(formArrayName, formArray);
     return;
   }
 
