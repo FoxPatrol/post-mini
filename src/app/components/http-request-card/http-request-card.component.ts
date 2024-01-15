@@ -2,6 +2,7 @@ import { Component, NgZone, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import {
+  AbstractControl,
   FormArray,
   FormBuilder,
   FormControl,
@@ -59,6 +60,8 @@ export class HttpRequestCardComponent {
   loadingState: LoadingState = LoadingState.Default;
 
   initialValue: string | null = null;
+  headerCount: number = 0;
+  paramCount: number = 0;
 
   constructor(
     public http: HttpClient,
@@ -264,6 +267,21 @@ export class HttpRequestCardComponent {
   deleteFormFromFormArray(formArray: FormArray, index: number) {
     formArray.removeAt(index);
 
+    const formArrayName = this.getControlNameOfFormArray(formArray);
+
+    if (!formArrayName) {
+      return;
+    }
+
+    // Reassign the form array to trigger update
+    this.requestForm.setControl(
+      formArrayName,
+      new FormArray(formArray.controls)
+    );
+    return;
+  }
+
+  getControlNameOfFormArray(formArray: FormArray): string | null {
     // Find the key associated with the formArray
     let key: string | null = null;
     Object.keys(this.requestForm.controls).forEach((formControlKey) => {
@@ -273,13 +291,7 @@ export class HttpRequestCardComponent {
       }
     });
 
-    if (!key) {
-      return;
-    }
-
-    // Reassign the form array to trigger update
-    this.requestForm.setControl(key, new FormArray(formArray.controls));
-    return;
+    return key;
   }
 
   addNewFormToFormArray(formArray: FormArray) {
@@ -312,6 +324,8 @@ export class HttpRequestCardComponent {
         nameControl?.disable();
         valueControl?.disable();
       }
+
+      this.recountEnabledElementsInFormArray(formArray);
     });
   }
 
@@ -320,5 +334,31 @@ export class HttpRequestCardComponent {
     this._ngZone.onStable
       .pipe(take(1))
       .subscribe(() => this.autosize.resizeToFitContent(true));
+  }
+
+  recountEnabledElementsInFormArray(formArray: FormArray) {
+    let count = 0;
+
+    formArray.controls.forEach((control: AbstractControl) => {
+      if (control.get('enabled')?.value === true) {
+        count++;
+      }
+    });
+
+    const formArrayName = this.getControlNameOfFormArray(formArray);
+    switch (formArrayName) {
+      case 'headers':
+        this.headerCount = count;
+        break;
+
+      case 'params':
+        this.paramCount = count;
+        break;
+
+      default:
+        break;
+    }
+
+    return;
   }
 }
