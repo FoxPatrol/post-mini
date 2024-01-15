@@ -4,6 +4,8 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 The project aims to build an API requester tool, that does not required authentication to use.
 
+The objective of this project is to learn the new version of Angular, 17.
+
 ## Styling
 
 For styling, it uses [TailwindCSS](https://v2.tailwindcss.com/docs) and [Angular Material](https://material.angular.io/).
