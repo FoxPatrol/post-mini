@@ -47,63 +47,11 @@
         [label]="headerCount > 0 ? 'Headers (' + headerCount + ')' : 'Headers'"
         class="flex flex-col"
       >
-        <div formArrayName="headers" class="flex flex-col mt-3">
-          @for (headerForm of headers.controls; track $index) {
-          <div
-            [formGroupName]="$index"
-            class="flex flex-row gap-2 justify-between"
-          >
-            <mat-form-field appearance="outline" class="flex-1">
-              <mat-label>Header Name</mat-label>
-              <input
-                matInput
-                type="text"
-                id="name"
-                formControlName="name"
-                placeholder="name"
-                (focus)="onFocus($event)"
-                (change)="onChangeFormArray($event, headers, $index)"
-              />
-            </mat-form-field>
-            <mat-form-field appearance="outline" class="flex-1">
-              <mat-label>Header Value</mat-label>
-              <input
-                matInput
-                type="text"
-                id="value"
-                formControlName="value"
-                placeholder="value"
-              />
-            </mat-form-field>
-
-            <div
-              class="grid grid-cols-2 place-items-center pb-[22px] px-2 gap-2"
-            >
-              <div>
-                <mat-checkbox
-                  matTooltip="{{
-                    headerForm.get('enabled')?.value
-                      ? 'Disable header'
-                      : 'Enable header'
-                  }}"
-                  id="enabled"
-                  formControlName="enabled"
-                ></mat-checkbox>
-              </div>
-
-              <button
-                mat-icon-button
-                matTooltip="Delete header"
-                color="primary"
-                [disabled]="$last"
-                (click)="deleteFormFromFormArray(headers, $index)"
-              >
-                <mat-icon>delete</mat-icon>
-              </button>
-            </div>
-          </div>
-          }
-        </div>
+        <app-key-value-table
+          [parentFormGroup]="headers"
+          [singularDisplayName]="'Header'"
+          (enabledRowsCount)="setHeaderCount($event)"
+        ></app-key-value-table>
       </mat-tab>
 
       <!-- Params -->
@@ -111,59 +59,11 @@
         [label]="paramCount > 0 ? 'Params (' + paramCount + ')' : 'Params'"
         class="flex flex-col"
       >
-        <div formArrayName="params" class="flex flex-col mt-3">
-          @for (paramForm of params.controls; track $index) {
-          <div
-            [formGroupName]="$index"
-            class="flex flex-row gap-1 justify-between"
-          >
-            <mat-form-field appearance="outline" class="flex-1">
-              <mat-label>Param Name</mat-label>
-              <input
-                matInput
-                type="text"
-                id="name"
-                formControlName="name"
-                placeholder="name"
-                class="flex-1 py-1"
-                (focus)="onFocus($event)"
-                (change)="onChangeFormArray($event, params, $index)"
-              />
-            </mat-form-field>
-            <mat-form-field appearance="outline" class="flex-1">
-              <mat-label>Param Value</mat-label>
-              <input
-                matInput
-                type="text"
-                id="value"
-                formControlName="value"
-                placeholder="value"
-                class="flex-1 py-1"
-              />
-            </mat-form-field>
-
-            <div
-              class="grid grid-cols-2 place-items-center pb-[22px] px-2 gap-2"
-            >
-              <div>
-                <mat-checkbox
-                  id="enabled"
-                  formControlName="enabled"
-                ></mat-checkbox>
-              </div>
-
-              <button
-                mat-icon-button
-                color="primary"
-                [disabled]="$last"
-                (click)="deleteFormFromFormArray(params, $index)"
-              >
-                <mat-icon>delete</mat-icon>
-              </button>
-            </div>
-          </div>
-          }
-        </div>
+        <app-key-value-table
+          [parentFormGroup]="params"
+          [singularDisplayName]="'Param'"
+          (enabledRowsCount)="setParamCount($event)"
+        ></app-key-value-table>
       </mat-tab>
 
       <!-- Body -->

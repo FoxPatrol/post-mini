@@ -1,0 +1,55 @@
+<form [formGroup]="parentFormGroup">
+  <div formArrayName="array" class="flex flex-col mt-3">
+    @for (formElement of formArray.controls; track $index) {
+    <div [formGroupName]="$index" class="flex flex-row gap-2 justify-between">
+      <mat-form-field appearance="outline" class="flex-1">
+        <mat-label>{{ singularDisplayName }} Name</mat-label>
+        <input
+          matInput
+          type="text"
+          id="name"
+          formControlName="name"
+          placeholder="name"
+          (focus)="onNameInputFocus($event)"
+          (change)="onNameInputChange($event, $index)"
+        />
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="flex-1">
+        <mat-label>{{ singularDisplayName }} Value</mat-label>
+        <input
+          matInput
+          type="text"
+          id="value"
+          formControlName="value"
+          placeholder="value"
+        />
+      </mat-form-field>
+
+      <div class="grid grid-cols-2 place-items-center pb-[22px] px-2 gap-2">
+        <div>
+          <mat-checkbox
+            matTooltip="{{
+              formElement.get('enabled')?.value
+                ? 'Disable ' + singularDisplayName.toLowerCase()
+                : 'Enable ' + singularDisplayName.toLowerCase()
+            }}"
+            id="enabled"
+            formControlName="enabled"
+          ></mat-checkbox>
+        </div>
+
+        <button
+          mat-icon-button
+          matTooltip="{{ 'Delete ' + singularDisplayName.toLowerCase() }}"
+          color="primary"
+          type="button"
+          [disabled]="$last"
+          (click)="deleteForm($index)"
+        >
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </div>
+    }
+  </div>
+</form>

@@ -1,4 +1,4 @@
-import { Component, NgZone, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, NgZone, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import {
@@ -22,6 +22,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { CdkTextareaAutosize, TextFieldModule } from '@angular/cdk/text-field';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { KeyValueTableComponent } from './key-value-table/key-value-table.component';
 
 enum LoadingState {
   Default,
@@ -30,7 +31,7 @@ enum LoadingState {
   Error,
 }
 
-type Header = {
+type NameValuePair = {
   name: string;
   value: string;
 };
@@ -41,6 +42,8 @@ type Header = {
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    KeyValueTableComponent,
+
     MatButtonModule,
     MatCardModule,
     MatFormFieldModule,
@@ -76,13 +79,10 @@ export class HttpRequestCardComponent {
         'https://echo.hoppscotch.io',
         [Validators.required, this.urlValidator],
       ],
-      headers: this.formBuilder.array([]),
-      params: this.formBuilder.array([]),
+      headers: this.formBuilder.group([]),
+      params: this.formBuilder.group([]),
       body: [''],
     });
-
-    this.addNewFormToFormArray(this.headers); // start headers with 1
-    this.addNewFormToFormArray(this.params); // start params with 1
   }
 
   //@ts-ignore this is used for the auto resizing ot the text area
@@ -104,9 +104,12 @@ export class HttpRequestCardComponent {
     let url = urlInput.value;
 
     const headerInput = this.headers;
+    const headerFormArray = headerInput.get('array') as FormArray;
     let headers = {};
-    if (headerInput && headerInput.length > 0) {
-      headers = this.headersToDictionary(headerInput.value as Header[]);
+    if (headerFormArray && headerFormArray.length > 0) {
+      headers = this.arrayToDictionary(
+        headerFormArray.value as NameValuePair[]
+      );
     }
 
     //const paramInput = this.params;
@@ -124,9 +127,10 @@ export class HttpRequestCardComponent {
     //}
 
     const paramInput = this.params;
+    const paramFormArray = paramInput.get('array') as FormArray;
     let params = {};
-    if (paramInput && paramInput.length > 0) {
-      params = this.headersToDictionary(paramInput.value as Header[]);
+    if (paramFormArray && paramFormArray.length > 0) {
+      params = this.arrayToDictionary(paramFormArray.value as NameValuePair[]);
     }
 
     const body = this.body.value;
@@ -161,7 +165,7 @@ export class HttpRequestCardComponent {
     return input.trim().replace(/^['"]|['"]$/g, '');
   }
 
-  headersToDictionary(headers: Header[]) {
+  arrayToDictionary(headers: NameValuePair[]) {
     const result: { [key: string]: string } = {};
 
     for (const header of headers) {
@@ -177,7 +181,7 @@ export class HttpRequestCardComponent {
     return result;
   }
 
-  paramsToUrl(headers: Header[]) {
+  paramsToUrl(headers: NameValuePair[]) {
     const result: { [key: string]: string } = {};
 
     for (const header of headers) {
@@ -208,126 +212,16 @@ export class HttpRequestCardComponent {
     return null;
   }
 
-  private valueRequiredIfNameValidator(control: FormControl) {
-    const nameControl = control.parent?.get('name');
-    const name = nameControl?.value;
-    const value = control.value;
-
-    if (name && !value) {
-      return { valueRequiredWhenNameNotEmpty: true };
-    }
-
-    return null;
-  }
-
-  private headerNameValidator(control: FormControl) {
-    if (!control.value) {
-      return null; // No validation errors if the value is empty
-    }
-
-    const pattern = new RegExp(`^['A-Za-z0-9\\-._']+$`);
-    if (!pattern.test(control.value)) {
-      return { allowedCharacters: true };
-    }
-
-    return null;
-  }
-
   get headers() {
-    return this.requestForm.controls['headers'] as FormArray;
+    return this.requestForm.controls['headers'] as FormGroup;
   }
 
   get params() {
-    return this.requestForm.controls['params'] as FormArray;
+    return this.requestForm.controls['params'] as FormGroup;
   }
 
   get body() {
     return this.requestForm.controls['body'];
-  }
-
-  onFocus(event: any) {
-    this.initialValue = event.target.value;
-  }
-
-  onChangeFormArray(event: any, formArray: FormArray, formIndex: any) {
-    formArray.at(formIndex).get('value')?.updateValueAndValidity();
-
-    if (!event || !event.target) {
-      return;
-    }
-
-    const currentValue: string = event.target.value;
-    const previousValue = this.initialValue;
-
-    if (!previousValue && currentValue) {
-      this.addNewFormToFormArray(formArray);
-    } else if (previousValue && !currentValue) {
-      this.deleteFormFromFormArray(formArray, formIndex);
-    }
-  }
-
-  deleteFormFromFormArray(formArray: FormArray, index: number) {
-    formArray.removeAt(index);
-
-    const formArrayName = this.getControlNameOfFormArray(formArray);
-
-    if (!formArrayName) {
-      return;
-    }
-
-    this.recountEnabledElementsInFormArray(formArray);
-
-    // Reassign the form array to trigger update
-    this.requestForm.setControl(formArrayName, formArray);
-    return;
-  }
-
-  getControlNameOfFormArray(formArray: FormArray): string | null {
-    // Find the key associated with the formArray
-    let key: string | null = null;
-    Object.keys(this.requestForm.controls).forEach((formControlKey) => {
-      if (this.requestForm.controls[formControlKey] === formArray) {
-        key = formControlKey;
-        return; // exit the loop once found
-      }
-    });
-
-    return key;
-  }
-
-  addNewFormToFormArray(formArray: FormArray) {
-    const form = this.formBuilder.group({
-      name: [{ value: '', disabled: false }, this.headerNameValidator],
-      value: [{ value: '', disabled: false }],
-      enabled: { value: null, disabled: true },
-    });
-
-    // On add new form, set last form to have checkbox checked and enabled
-    const lastControl = formArray.at(formArray.length - 1);
-    if (lastControl) {
-      const checkbox = lastControl.get('enabled');
-      checkbox?.enable();
-      checkbox?.setValue(true);
-    }
-
-    formArray.push(form);
-
-    // Subscribe to changes in the 'checked' control
-    form.get('enabled')?.valueChanges.subscribe((isEnabled) => {
-      const nameControl = form.get('name');
-      const valueControl = form.get('value');
-
-      // Enable or disable 'name' and 'value' controls based on the 'enabled' value
-      if (isEnabled) {
-        nameControl?.enable();
-        valueControl?.enable();
-      } else {
-        nameControl?.disable();
-        valueControl?.disable();
-      }
-
-      this.recountEnabledElementsInFormArray(formArray);
-    });
   }
 
   triggerResize() {
@@ -337,29 +231,11 @@ export class HttpRequestCardComponent {
       .subscribe(() => this.autosize.resizeToFitContent(true));
   }
 
-  recountEnabledElementsInFormArray(formArray: FormArray) {
-    let count = 0;
+  setHeaderCount(count: number) {
+    this.headerCount = count;
+  }
 
-    formArray.controls.forEach((control: AbstractControl) => {
-      if (control.get('enabled')?.value === true) {
-        count++;
-      }
-    });
-
-    const formArrayName = this.getControlNameOfFormArray(formArray);
-    switch (formArrayName) {
-      case 'headers':
-        this.headerCount = count;
-        break;
-
-      case 'params':
-        this.paramCount = count;
-        break;
-
-      default:
-        break;
-    }
-
-    return;
+  setParamCount(count: number) {
+    this.paramCount = count;
   }
 }
