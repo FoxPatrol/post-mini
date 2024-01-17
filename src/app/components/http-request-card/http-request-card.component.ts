@@ -1,4 +1,11 @@
-import { ChangeDetectorRef, Component, NgZone, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  NgZone,
+  ViewChild,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import {
@@ -68,6 +75,8 @@ export class HttpRequestCardComponent {
   headerCount: number = 0;
   paramCount: number = 0;
 
+  arrayOfNumberOfLines: number[] = [];
+
   constructor(
     public http: HttpClient,
     private formBuilder: FormBuilder,
@@ -87,6 +96,21 @@ export class HttpRequestCardComponent {
 
   //@ts-ignore this is used for the auto resizing ot the text area
   @ViewChild('autosize') autosize: CdkTextareaAutosize;
+
+  updateNumberOfLines(event: any): void {
+    const text: string = event.target.value;
+    if (!text) {
+      this.arrayOfNumberOfLines = [];
+      return;
+    }
+
+    const numberOfLines = text.split('\n').length;
+    const arrayNumber = Array.from(
+      { length: numberOfLines },
+      (_, index) => index + 1
+    );
+    this.arrayOfNumberOfLines = arrayNumber;
+  }
 
   get LoadingState() {
     return LoadingState;
