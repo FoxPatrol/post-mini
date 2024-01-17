@@ -10,7 +10,7 @@ The objective of this project is to learn the new version of Angular, 17.
 
 For styling, it uses [TailwindCSS](https://v2.tailwindcss.com/docs) and [Angular Material](https://material.angular.io/).
 
-For icons, it uses both icons from [Angular Material Icons](https://fonts.google.com/icons) and [FontAwesome](https://fontawesome.com/). For all features related to the icons, visit the [documentation](https://github.com/FortAwesome/angular-fontawesome/blob/HEAD/docs/usage/features.md).
+For icons, it uses both icons from [Angular Material Icons](https://fonts.google.com/icons) and [FontAwesome](https://fontawesome.com/). A [List of Angular Material Icons (non-official)](https://www.angularjswiki.com/angular/angular-material-icons-list-mat-icon-list) is here linked for your use.
 
 ### How to use TailwindCSS
 

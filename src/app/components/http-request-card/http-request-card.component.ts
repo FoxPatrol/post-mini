@@ -30,6 +30,7 @@ import { CdkTextareaAutosize, TextFieldModule } from '@angular/cdk/text-field';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { KeyValueTableComponent } from './key-value-table/key-value-table.component';
+import { DownloadService } from 'app/services/download.service';
 
 enum LoadingState {
   Default,
@@ -80,7 +81,8 @@ export class HttpRequestCardComponent {
   constructor(
     public http: HttpClient,
     private formBuilder: FormBuilder,
-    private _ngZone: NgZone
+    private _ngZone: NgZone,
+    private downloadService: DownloadService
   ) {
     this.requestForm = this.formBuilder.group({
       verb: ['GET', Validators.required],
@@ -261,5 +263,37 @@ export class HttpRequestCardComponent {
 
   setParamCount(count: number) {
     this.paramCount = count;
+  }
+
+  copyToClipboard() {
+    const body = this.body.value;
+    navigator.clipboard.writeText(body);
+  }
+
+  downloadToFile() {
+    const body = this.body.value;
+    if (!body) {
+      return;
+    }
+    this.downloadService.downloadToFile(body);
+  }
+
+  uploadFromFile(event: any) {
+    const inputElement = event.target as HTMLInputElement;
+    const file = inputElement?.files?.[0];
+
+    if (file) {
+      const reader = new FileReader();
+
+      // setup copy of content to body on reading file
+      reader.onload = (e) => {
+        const fileContent = e.target?.result as string;
+        this.body.setValue(fileContent);
+      };
+
+      reader.readAsText(file); // load file
+    }
+
+    event.target.value = null; // reset file uploaded so it retriggers on uploading same file
   }
 }
