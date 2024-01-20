@@ -79,7 +79,7 @@ export class HttpRequestCardComponent {
   arrayOfNumberOfLines: number[] = [];
 
   constructor(
-    public http: HttpClient,
+    private http: HttpClient,
     private formBuilder: FormBuilder,
     private _ngZone: NgZone,
     private downloadService: DownloadService
