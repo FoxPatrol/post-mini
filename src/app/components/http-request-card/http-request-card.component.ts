@@ -1,15 +1,7 @@
-import {
-  AfterViewInit,
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  NgZone,
-  ViewChild,
-} from '@angular/core';
+import { Component, NgZone, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import {
-  AbstractControl,
   FormArray,
   FormBuilder,
   FormControl,
@@ -188,7 +180,10 @@ export class HttpRequestCardComponent {
 
   cleanString(input: string): string {
     // Remove trailing whitespaces and quotes from the start and end
-    return input.trim().replace(/^['"]|['"]$/g, '');
+    return input
+      .trim()
+      .replace(/^['"]|['"]$/g, '')
+      .trim();
   }
 
   arrayToDictionary(headers: NameValuePair[]) {
