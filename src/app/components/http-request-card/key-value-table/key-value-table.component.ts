@@ -137,16 +137,4 @@ export class KeyValueTableComponent implements OnInit {
 
     return null;
   }
-
-  private valueRequiredIfNameValidator(control: FormControl) {
-    const nameControl = control.parent?.get('name');
-    const name = nameControl?.value;
-    const value = control.value;
-
-    if (name && !value) {
-      return { valueRequiredWhenNameNotEmpty: true };
-    }
-
-    return null;
-  }
 }
