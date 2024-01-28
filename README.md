@@ -22,8 +22,7 @@ For icons, it uses both icons from [Angular Material Icons](https://fonts.google
 
 TailwindCSS can be configured via the file `tailwindcss.config.js`. To use, visit the [docs](https://v2.tailwindcss.com/docs) and use its classes directly in html elements, as so:
 
-`
-
+```
 <div class="flex flex-row gap-2">
   <div class="bg-yellow-100 w-12 h-12"></div>
   <div class="bg-yellow-200 w-12 h-12"></div>
@@ -35,7 +34,7 @@ TailwindCSS can be configured via the file `tailwindcss.config.js`. To use, visi
   <div class="bg-yellow-800 w-12 h-12"></div>
   <div class="bg-yellow-900 w-12 h-12"></div>
 </div>
-`
+```
 
 ### How to use Angular Material
 
@@ -45,8 +44,7 @@ Then, import the modules in your angular component and add them to the `imports`
 
 You are set! Use directly in the template as so:
 
-`
-
+```
 <mat-card>
   <mat-card-header>
     <mat-card-title>Card Title</mat-card-title>
@@ -66,7 +64,7 @@ You are set! Use directly in the template as so:
     </button>
   </mat-card-actions>
 </mat-card>
-`
+```
 
 ## Request source
 
