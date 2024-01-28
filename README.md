@@ -1,10 +1,16 @@
 # Post Mini
 
+## Project Overview
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.0.9.
 
-The project aims to build an API requester tool, that does not required authentication to use.
+The project aims to build an API requester tool, that does not require a user to be authenticated to use.
 
-The objective of this project is to learn the new version of Angular, 17.
+The primary goal of this project is to explore the latest features and enhancements introduced in Angular 17, and staying current to the latest trends.
+
+## Development server
+
+Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
 
 ## Styling
 
@@ -62,13 +68,13 @@ You are set! Use directly in the template as so:
 </mat-card>
 `
 
-## Development server
-
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
-
 ## Request source
 
 To test requests, an endpoint must be requested. For this, a variety of sources can be used. These are some of the readily available:
 
 [Json placeholder](https://jsonplaceholder.typicode.com) available for free use online
 [Json server](https://www.npmjs.com/package/json-server) npm package
+
+## Testing
+
+Run `npm run test` to execute unit tests via [Jest](https://jestjs.io/docs/getting-started).
