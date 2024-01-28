@@ -22,7 +22,7 @@ For icons, it uses both icons from [Angular Material Icons](https://fonts.google
 
 TailwindCSS can be configured via the file `tailwindcss.config.js`. To use, visit the [docs](https://v2.tailwindcss.com/docs) and use its classes directly in html elements, as so:
 
-```
+```html
 <div class="flex flex-row gap-2">
   <div class="bg-yellow-100 w-12 h-12"></div>
   <div class="bg-yellow-200 w-12 h-12"></div>
@@ -44,24 +44,15 @@ Then, import the modules in your angular component and add them to the `imports`
 
 You are set! Use directly in the template as so:
 
-```
+```html
 <mat-card>
   <mat-card-header>
     <mat-card-title>Card Title</mat-card-title>
-    <mat-card-subtitle
-      >Some interesting information that describes the card</mat-card-subtitle
-    >
+    <mat-card-subtitle>Some interesting information that describes the card</mat-card-subtitle>
   </mat-card-header>
-  <mat-card-content>
-    Content of the card
-  </mat-card-content>
+  <mat-card-content> Content of the card </mat-card-content>
   <mat-card-actions>
-    <button
-      mat-raised-button
-      color="primary"
-    >
-      Click me!
-    </button>
+    <button mat-raised-button color="primary">Click me!</button>
   </mat-card-actions>
 </mat-card>
 ```
