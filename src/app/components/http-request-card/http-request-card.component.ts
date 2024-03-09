@@ -1,6 +1,5 @@
 import { Component, NgZone, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 import {
   FormArray,
   FormBuilder,
@@ -9,27 +8,21 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { firstValueFrom, take } from 'rxjs';
+import { take } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatTabsModule } from '@angular/material/tabs';
 import { CdkTextareaAutosize, TextFieldModule } from '@angular/cdk/text-field';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatTooltipModule } from '@angular/material/tooltip';
 import { KeyValueTableComponent } from './key-value-table/key-value-table.component';
-import { DownloadService } from 'app/services/download.service';
-
-enum LoadingState {
-  Default,
-  Loading,
-  Loaded,
-  Error,
-}
+import { RequestDataService } from 'app/services/request-data.service';
+import { CopyToClipboardButtonComponent } from '@components/shared/copy-to-clipboard-button/copy-to-clipboard-button.component';
+import { LoadFromFileButtonComponent } from '@components/shared/load-from-file-button/load-from-file-button.component';
+import { DownloadToFileButtonComponent } from '@components/shared/download-to-file-button/download-to-file-button.component';
 
 type NameValuePair = {
   name: string;
@@ -43,26 +36,25 @@ type NameValuePair = {
     CommonModule,
     ReactiveFormsModule,
     KeyValueTableComponent,
+    CopyToClipboardButtonComponent,
+    LoadFromFileButtonComponent,
+    DownloadToFileButtonComponent,
 
     MatButtonModule,
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
-    MatIconModule,
     MatDividerModule,
     MatTabsModule,
     TextFieldModule,
     MatCheckboxModule,
-    MatTooltipModule,
   ],
   templateUrl: './http-request-card.component.html',
   styleUrl: './http-request-card.component.scss',
 })
 export class HttpRequestCardComponent {
   requestForm: FormGroup;
-  response: any;
-  loadingState: LoadingState = LoadingState.Default;
 
   initialValue: string | null = null;
   headerCount: number = 0;
@@ -71,10 +63,9 @@ export class HttpRequestCardComponent {
   arrayOfNumberOfLines: number[] = [];
 
   constructor(
-    private http: HttpClient,
     private formBuilder: FormBuilder,
     private _ngZone: NgZone,
-    private downloadService: DownloadService
+    private rdService: RequestDataService
   ) {
     this.requestForm = this.formBuilder.group({
       verb: ['GET', Validators.required],
@@ -106,10 +97,6 @@ export class HttpRequestCardComponent {
     this.arrayOfNumberOfLines = arrayNumber;
   }
 
-  get LoadingState() {
-    return LoadingState;
-  }
-
   async sendRequest() {
     const methodInput = this.requestForm.get('verb');
     const urlInput = this.requestForm.get('url');
@@ -118,7 +105,7 @@ export class HttpRequestCardComponent {
       return;
     }
 
-    const method = methodInput.value;
+    const method: string = methodInput.value;
     let url = urlInput.value;
 
     const headerInput = this.headers;
@@ -153,29 +140,7 @@ export class HttpRequestCardComponent {
 
     const body = this.body.value;
 
-    this.loadingState = LoadingState.Loading;
-
-    try {
-      this.response = await firstValueFrom(
-        this.http.request(method, url, {
-          headers: headers,
-          params: params,
-          body: body.length > 0 ? body : null,
-        })
-      );
-      console.log({
-        method,
-        url,
-        headers,
-        params,
-        body,
-        response: this.response,
-      });
-      this.loadingState = LoadingState.Loaded;
-    } catch (error) {
-      console.error('Error occurred:', error);
-      this.loadingState = LoadingState.Error;
-    }
+    this.rdService.sendRequest(method, url, headers, params, body);
   }
 
   cleanString(input: string): string {
@@ -258,37 +223,5 @@ export class HttpRequestCardComponent {
 
   setParamCount(count: number) {
     this.paramCount = count;
-  }
-
-  copyToClipboard() {
-    const body = this.body.value;
-    navigator.clipboard.writeText(body);
-  }
-
-  downloadToFile() {
-    const body = this.body.value;
-    if (!body) {
-      return;
-    }
-    this.downloadService.downloadToFile(body);
-  }
-
-  uploadFromFile(event: any) {
-    const inputElement = event.target as HTMLInputElement;
-    const file = inputElement?.files?.[0];
-
-    if (file) {
-      const reader = new FileReader();
-
-      // setup copy of content to body on reading file
-      reader.onload = (e) => {
-        const fileContent = e.target?.result as string;
-        this.body.setValue(fileContent);
-      };
-
-      reader.readAsText(file); // load file
-    }
-
-    event.target.value = null; // reset file uploaded so it retriggers on uploading same file
   }
 }

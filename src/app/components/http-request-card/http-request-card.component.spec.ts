@@ -3,7 +3,6 @@ import { HttpRequestCardComponent } from './http-request-card.component';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormControl } from '@angular/forms';
-import { of, throwError } from 'rxjs';
 
 enum LoadingState {
   Default,
@@ -78,46 +77,6 @@ describe('HttpRequestCardComponent', () => {
     expect(cleanedString).toBe('test');
   });
 
-  it('should set loadingState when sendRequest is called', async () => {
-    // should start as default
-    expect(component.loadingState).toBe(LoadingState.Default);
-
-    // @ts-ignore
-    const httpSpy = jest.spyOn(component.http, 'request');
-    httpSpy.mockReturnValue(of({}));
-
-    const req = component.sendRequest();
-
-    // should be loading
-    expect(component.loadingState).toBe(LoadingState.Loading);
-
-    // wait for finish loading, should have loaded
-    await req;
-    expect(component.loadingState).toBe(LoadingState.Loaded);
-
-    httpSpy.mockRestore();
-  });
-
-  it('should set loadingState to Error when sendRequest encounters an error', async () => {
-    // should start as default
-    expect(component.loadingState).toBe(LoadingState.Default);
-
-    // @ts-ignore
-    const httpSpy = jest.spyOn(component.http, 'request');
-    const errorResponse = new Error('Simulated error');
-
-    // Simulate a delayed error response (200ms delay)
-    httpSpy.mockReturnValue(throwError(() => of(errorResponse)));
-
-    const req = component.sendRequest();
-    expect(component.loadingState).toBe(LoadingState.Loading);
-
-    await req;
-    expect(component.loadingState).toBe(LoadingState.Error);
-
-    httpSpy.mockRestore();
-  });
-
   it('should convert an array of NameValuePair to a dictionary', () => {
     const headersArray: NameValuePair[] = [
       { name: 'Header1', value: 'Value1' },
@@ -178,65 +137,5 @@ describe('HttpRequestCardComponent', () => {
     const count = 8;
     component.setParamCount(count);
     expect(component.paramCount).toBe(count);
-  });
-
-  it('should copy text to clipboard', () => {
-    const bodyText = 'Test text';
-    component.body.setValue(bodyText);
-
-    const clipboardWriteTextMock = jest.fn();
-    const originalClipboard = { ...navigator.clipboard }; // Create a copy of the original clipboard
-
-    // Mock the navigator object
-    Object.defineProperty(navigator, 'clipboard', {
-      writable: true,
-      value: { writeText: clipboardWriteTextMock },
-    });
-
-    component.copyToClipboard();
-
-    expect(clipboardWriteTextMock).toHaveBeenCalledWith(bodyText);
-
-    // Restore the original navigator object
-    Object.defineProperty(navigator, 'clipboard', {
-      writable: true,
-      value: originalClipboard,
-    });
-  });
-
-  it('should read file content and set it to body when uploadFromFile is called', () => {
-    const fileContent = 'File content';
-    const mockFile = new File([fileContent], 'test.txt', {
-      type: 'text/plain',
-    });
-
-    const event = {
-      target: {
-        files: [mockFile],
-      },
-    } as any;
-
-    const mockFileReader = {
-      onload: jest.fn(),
-      readAsText: jest.fn(),
-    } as any;
-    jest.spyOn(window, 'FileReader').mockImplementation(() => mockFileReader);
-    component.uploadFromFile(event);
-
-    fixture.whenStable().then(() => {
-      expect(mockFileReader.readAsText).toHaveBeenCalledWith(mockFile);
-      expect(component.body.value).toBe(fileContent);
-    });
-  });
-
-  it('should reset file input value when uploadFromFile is called', () => {
-    const event = {
-      target: {
-        value: 'file.txt',
-      },
-    } as any;
-
-    component.uploadFromFile(event);
-    expect(event.target.value).toBeNull();
   });
 });

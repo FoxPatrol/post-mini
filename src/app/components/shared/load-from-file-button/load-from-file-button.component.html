@@ -1,0 +1,18 @@
+<input
+  type="file"
+  #uploadFileForBody
+  class="hidden"
+  accept=".txt, .json"
+  value="C:\fakepath"
+  (input)="uploadFromFile($event)"
+/>
+
+<button
+  mat-icon-button
+  matTooltip="Load from file"
+  color="primary"
+  type="button"
+  (click)="uploadFileForBody.click()"
+>
+  <mat-icon>attachment</mat-icon>
+</button>

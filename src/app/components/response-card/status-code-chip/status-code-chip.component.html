@@ -1,0 +1,7 @@
+<div
+  class="flex justify-center align-middle p-2 px-6 rounded-2xl"
+  [ngClass]="getStatusCodeColor()"
+  matTooltip="{{ httpStatusCodes[statusCode] }}"
+>
+  {{ statusCode }}
+</div>

@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 export class DownloadService {
   constructor() {}
 
-  downloadToFile(text: string) {
+  downloadToFile(text: string, fileName: string) {
     if (!text) {
       return;
     }
@@ -16,7 +16,7 @@ export class DownloadService {
 
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'body.json';
+    a.download = `${fileName}.json`;
     document.body.appendChild(a);
     a.click();
 

@@ -20,7 +20,7 @@ describe('DownloadService', () => {
   it('should not create a download link if text is not provided', () => {
     const createElementSpy = jest.spyOn(document, 'createElement');
 
-    service.downloadToFile('');
+    service.downloadToFile('', '');
 
     expect(createElementSpy).not.toHaveBeenCalled();
   });
@@ -34,7 +34,7 @@ describe('DownloadService', () => {
       .mockImplementation(() => {});
     const removeChildSpy = jest.spyOn(document.body, 'removeChild');
 
-    service.downloadToFile(text);
+    service.downloadToFile(text, 'down.json');
 
     expect(createElementSpy).toHaveBeenCalledWith('a');
     expect(appendChildSpy).toHaveBeenCalled();

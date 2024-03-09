@@ -1,0 +1,124 @@
+<mat-card>
+  <mat-card-header class="flex flex-row justify-between">
+    <mat-card-title>HTTP Response</mat-card-title>
+    <div class="flex flex-row justify-center gap-2">
+      @if (rdService.sizeBytes() !== null) {
+      <div class="pt-2 text-zinc-400" matTooltip="Size of response">
+        {{ rdService.sizeBytes()! * 0.001 | number : "1.1-1" }} kB
+      </div>
+      } @if (rdService.timeTakenMilliseconds() !== null) {
+      <div class="pt-2 text-zinc-400" matTooltip="Respose time taken">
+        {{ rdService.timeTakenMilliseconds() }} ms
+      </div>
+      } @if (rdService.data()) {
+      <app-status-code-chip
+        statusCode="{{
+          rdService.state() === LoadingState.Error
+            ? 'Failed'
+            : rdService.data()
+            ? rdService.data().status
+            : 'should-not-have-this-state'
+        }}"
+      />
+      }
+    </div>
+  </mat-card-header>
+  <mat-card-content class="mt-4">
+    <!-- Display loading indicator or error message based on the loading state -->
+    <mat-tab-group
+      mat-stretch-tabs="false"
+      mat-align-tabs="start"
+      dynamicHeight
+      animationDuration="500"
+    >
+      <!-- Body -->
+      <mat-tab [label]="'Body'" class="flex flex-col">
+        <div class="absolute right-4 z-10">
+          <!-- Download to file button -->
+          <app-download-to-file-button
+            *ngIf="rdService.state() === LoadingState.Loaded"
+            [downloadTarget]="objectToString(rdService.data())"
+            fileName="response_body"
+          />
+
+          <!-- Copy to clipboard button -->
+          <app-copy-to-clipboard-button
+            *ngIf="rdService.state() === LoadingState.Loaded"
+            [copyTarget]="objectToString(rdService.data())"
+          />
+        </div>
+
+        <div class="h-52 overflow-x-hidden">
+          <ng-template
+            *ngIf="rdService.state() === LoadingState.Error"
+            [ngTemplateOutlet]="errorHtml"
+          ></ng-template>
+
+          <div *ngIf="rdService.state() === LoadingState.Loading" class="py-2">
+            <ngx-skeleton-loader
+              count="5"
+              appearance="line"
+              animation="pulse"
+            ></ngx-skeleton-loader>
+          </div>
+
+          <!-- Display response body if is Loaded -->
+          <div *ngIf="rdService.state() === LoadingState.Loaded">
+            <pre>{{ rdService.data() | json }}</pre>
+          </div>
+        </div>
+      </mat-tab>
+
+      <!-- Headers -->
+      <mat-tab [label]="'Headers'" class="flex flex-col">
+        <div class="absolute right-4 z-10">
+          <!-- Download to file button -->
+          <app-download-to-file-button
+            *ngIf="rdService.state() === LoadingState.Loaded"
+            [downloadTarget]="mapToString(rdService.data().headers.headers)"
+            fileName="response_headers"
+          />
+
+          <!-- Copy to clipboard button -->
+          <app-copy-to-clipboard-button
+            *ngIf="rdService.state() === LoadingState.Loaded"
+            [copyTarget]="mapToString(rdService.data().headers.headers)"
+          />
+        </div>
+
+        <div class="h-52 overflow-x-hidden">
+          <ng-template
+            *ngIf="rdService.state() === LoadingState.Error"
+            [ngTemplateOutlet]="errorHtml"
+          ></ng-template>
+
+          <div *ngIf="rdService.state() === LoadingState.Loading" class="py-2">
+            <ngx-skeleton-loader
+              count="5"
+              appearance="line"
+              animation="pulse"
+            ></ngx-skeleton-loader>
+          </div>
+
+          <!-- Display response headers if is Loaded -->
+          <div *ngIf="rdService.state() === LoadingState.Loaded">
+            <p>{{ "{" }}</p>
+            <pre
+              *ngFor="let header of rdService.data().headers.headers | keyvalue"
+            >
+   {{ header.key }}: {{ header.value }}</pre
+            >
+            <p>{{ "}" }}</p>
+            <div></div>
+          </div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-card-content>
+</mat-card>
+
+<ng-template #errorHtml>
+  <div class="flex flex-row justify-center items-center h-full">
+    Failed to load response data
+  </div>
+</ng-template>

@@ -31,8 +31,8 @@ import {
   styleUrl: './key-value-table.component.scss',
 })
 export class KeyValueTableComponent implements OnInit {
-  @Input() parentFormGroup!: FormGroup;
-  @Input() singularDisplayName!: string;
+  @Input({ required: true }) parentFormGroup!: FormGroup;
+  @Input({ required: true }) singularDisplayName!: string;
   @Output() enabledRowsCount: EventEmitter<number> = new EventEmitter<number>();
 
   formArray: FormArray;
